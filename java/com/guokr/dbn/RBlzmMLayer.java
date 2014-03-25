@@ -76,8 +76,8 @@ public class RBlzmMLayer {
             }
         }
 
-        IMatrix mp = phmean.outerProduct(input);
-        IMatrix mn = nhmeans.outerProduct(nvsamples);
+        IMatrix mp = input.outerProduct(phmean);
+        IMatrix mn = nvsamples.outerProduct(nhmeans);
 
         mp.scale(learning_rate);
         mn.scale(-learning_rate);

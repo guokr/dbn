@@ -2,7 +2,7 @@ package com.guokr.dbn;
 
 import static com.guokr.dbn.MathUtils.binomial;
 import static com.guokr.dbn.MathUtils.sigmoid;
-import static com.guokr.dbn.MatrixUtils.compose21;
+import static com.guokr.dbn.MatrixUtils.compose22;
 import static com.guokr.dbn.MatrixUtils.random;
 import static com.guokr.dbn.MatrixUtils.zero;
 import mikera.matrixx.IMatrix;
@@ -18,9 +18,9 @@ public class SigmoidLayer {
         this.onum = onum;
 
         double alpha = 1.0 / this.inum;
-        IMatrix rand = random(inum, onum, -alpha, alpha);
+        IMatrix rand = random(onum, inum, -alpha, alpha);
 
-        this.weights = compose21(zero(1, onum), rand);
+        this.weights = compose22(zero(1, 1), zero(1, inum), zero(onum, 1), rand);
     }
 
     public void osample_under_i(AVector osample, AVector isample) {

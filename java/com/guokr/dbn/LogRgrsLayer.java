@@ -15,7 +15,7 @@ public class LogRgrsLayer {
         this.inum = inum;
         this.onum = onum;
 
-        this.weights = zero(inum + 1, onum);
+        this.weights = zero(onum, inum + 1);
     }
 
     public void train(double learning_rate, AVector x, AVector y) {

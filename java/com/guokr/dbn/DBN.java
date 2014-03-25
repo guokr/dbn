@@ -30,7 +30,9 @@ public class DBN {
             int isize = lsizes[i];
             int osize = lsizes[i + 1];
             this.sig_layers[i] = new SigmoidLayer(isize, osize);
-            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, this.sig_layers[i].weights);
+            // this.rbm_layers[i] = new RBlzmMLayer(isize, osize,
+            // this.sig_layers[i].weights);
+            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, null);
         }
 
         this.log_layer = new LogRgrsLayer(lsizes[lsizes.length - 2], this.onum);
@@ -38,18 +40,13 @@ public class DBN {
 
     private AVector biased(AVector input) {
         AVector b = Vectorz.newVector(input.length() + 1);
-        b.set(0, 1);
-        int i = 1;
-        for (double e : input.asDoubleArray()) {
-            b.set(i, e);
-            i++;
-        }
+        input.copyTo(b, 1);
         return b;
     }
 
     public void pretrain(int k, int epochs, double learning_rate, AVector input) {
         input = biased(input);
-        
+
         AVector icur, iprev;
 
         for (int i = 0; i < lnum - 2; i++) { // layer-wise
@@ -71,7 +68,7 @@ public class DBN {
 
     public void finetune(int epochs, double learning_rate, AVector input, AVector result) {
         input = biased(input);
-        
+
         AVector icur, iprev;
         for (int epoch = 0; epoch < epochs; epoch++) {
             iprev = input;
@@ -90,17 +87,16 @@ public class DBN {
 
     public AVector predict(AVector input) {
         input = biased(input);
-        
+
         AVector icur = null, iprev = input;
 
-        for (int i = 1; i < lnum - 1; i++) {
+        for (int i = 0; i < lnum - 2; i++) {
             SigmoidLayer lcur = sig_layers[i];
+
             icur = lcur.weights.transform(iprev);
             icur.applyOp(opSigmoid);
 
-            if (i < lnum - 2) {
-                iprev = icur;
-            }
+            iprev = icur;
         }
 
         AVector result = log_layer.weights.transform(icur);
