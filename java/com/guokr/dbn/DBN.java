@@ -1,5 +1,6 @@
 package com.guokr.dbn;
 
+import static com.guokr.dbn.ANNUtils.biased;
 import static com.guokr.dbn.MatrixUtils.opSigmoid;
 import static com.guokr.dbn.MatrixUtils.opSoftmax;
 import mikera.matrixx.IMatrix;
@@ -39,12 +40,6 @@ public class DBN {
         this.log_layer = new LogRgrsLayer(lsizes[lsizes.length - 2], this.onum);
     }
 
-    private AVector biased(AVector input) {
-        AVector b = Vectorz.newVector(input.length() + 1);
-        input.copyTo(b, 1);
-        return b;
-    }
-
     public void pretrain(int k, int epochs, double learning_rate, AVector input) {
         input = biased(input);
 
@@ -58,7 +53,7 @@ public class DBN {
                 for (int l = 1; l <= i; l++) {
                     iprev = icur.clone();
 
-                    icur = biased(Vectorz.newVector(lsizes[l]));
+                    icur = biased(lsizes[l]);
                     sig_layers[l - 1].osample_under_i(icur, iprev);
                 }
 
@@ -73,7 +68,7 @@ public class DBN {
         AVector icur, iprev;
         for (int epoch = 0; epoch < epochs; epoch++) {
             iprev = input;
-            icur = biased(Vectorz.newVector(lsizes[1]));
+            icur = biased(lsizes[1]);
             sig_layers[0].osample_under_i(icur, iprev);
 
             for (int i = 1; i < lnum - 2; i++) {
