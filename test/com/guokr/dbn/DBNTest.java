@@ -1,7 +1,9 @@
 package com.guokr.dbn;
 
+import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class DBNTest {
@@ -38,9 +40,14 @@ public class DBNTest {
 
         // test data
         double[][] testdata = { { 1, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 0, 0 }, { 0, 0, 0, 1, 1, 0 }, { 0, 0, 1, 1, 1, 0 }, };
+        double[][] results = { { 1, 0 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, };
 
-        for (double[] item : testdata) {
-            System.out.println(dbn.predict(Vectorz.create(item)));
+        for (int i = 0; i < 4; i++) {
+            AVector result = dbn.predict(Vectorz.create(testdata[i]));
+            System.out.println(result);
+            result.scale(-1);
+            AVector test = Vectorz.create(results[i]);
+            Assert.assertTrue("error is greater than expected!", test.epsilonEquals(result, 0.1));
         }
     }
 

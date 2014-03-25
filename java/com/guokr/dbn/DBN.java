@@ -2,6 +2,7 @@ package com.guokr.dbn;
 
 import static com.guokr.dbn.MatrixUtils.opSigmoid;
 import static com.guokr.dbn.MatrixUtils.opSoftmax;
+import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
@@ -29,10 +30,10 @@ public class DBN {
         for (int i = 0; i < this.lnum - 2; i++) {
             int isize = lsizes[i];
             int osize = lsizes[i + 1];
-            this.sig_layers[i] = new SigmoidLayer(isize, osize);
-            // this.rbm_layers[i] = new RBlzmMLayer(isize, osize,
-            // this.sig_layers[i].weights);
-            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, null);
+
+            SigmoidLayer sigmoidLayer = new SigmoidLayer(isize, osize);
+            this.sig_layers[i] = sigmoidLayer;
+            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, (IMatrix)sigmoidLayer.weights.getTransposeView());
         }
 
         this.log_layer = new LogRgrsLayer(lsizes[lsizes.length - 2], this.onum);
