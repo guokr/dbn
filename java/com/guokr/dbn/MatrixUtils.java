@@ -70,9 +70,21 @@ public class MatrixUtils {
         return v;
     }
 
+    public static AVector one(int dim) {
+        AVector v = Vectorz.newVector(dim);
+        v.fill(1);
+        return v;
+    }
+
     public static IMatrix zero(int rows, int columns) {
         AMatrix m = Matrixx.newMatrix(rows, columns);
         m.fill(0);
+        return m;
+    }
+
+    public static IMatrix one(int rows, int columns) {
+        AMatrix m = Matrixx.newMatrix(rows, columns);
+        m.fill(1);
         return m;
     }
 
