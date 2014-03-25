@@ -104,6 +104,23 @@ public class MatrixUtils {
         return m;
     }
 
+    public static IMatrix compose12(IMatrix m11, IMatrix m12) {
+        int r = m11.rowCount();
+        int c1 = m11.columnCount(), c2 = m12.columnCount(), c = c1 + c2;
+        AMatrix m = Matrixx.newMatrix(r, c);
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c1; j++) {
+                m.set(i, j, m11.get(i, j));
+            }
+        }
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c2; j++) {
+                m.set(i, c1 + j, m12.get(i, j));
+            }
+        }
+        return m;
+    }
+
     public static IMatrix compose21(IMatrix m11, IMatrix m21) {
         int r1 = m11.rowCount(), r2 = m21.rowCount(), r = r1 + r2;
         int c = m11.columnCount();
