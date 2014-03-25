@@ -30,10 +30,12 @@ public class RBlzmMLayer {
     }
 
     public double up(AVector vsample, AVector vweight) {
+        vweight.set(0, 1);
         return sigmoid(vsample.innerProduct(vweight).value);
     }
 
     public double down(AVector hsample, AVector hweight) {
+        hweight.set(0, 1);
         return sigmoid(hsample.innerProduct(hweight).value);
     }
 
@@ -75,6 +77,9 @@ public class RBlzmMLayer {
                 gibbs_hvh(nhsamples, nvmeans, nvsamples, nhmeans, nhsamples);
             }
         }
+        
+        input.set(0, 1.0 / vnum);
+        nvsamples.set(0, 1.0 / vnum);
 
         IMatrix mp = input.outerProduct(phmean);
         IMatrix mn = nvsamples.outerProduct(nhmeans);
@@ -84,6 +89,11 @@ public class RBlzmMLayer {
 
         weights.add(mp);
         weights.add(mn);
+
+        for (int i = 1; i < vnum + 1; i++) {
+            double val = weights.get(i, 0);
+            weights.set(i, 0, val + learning_rate * (input.get(i) - nvsamples.get(i)));
+        }
 
     }
 
