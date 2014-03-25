@@ -39,14 +39,14 @@ public class RBlzmMLayer {
 
     public void hsample_under_v(AVector hsample, AVector hmean, AVector vsample) {
         for (int i = 0; i < hnum; i++) {
-            hmean.set(i, up(vsample, weights.getRow(i)));
+            hmean.set(i, up(vsample, weights.getColumn(i)));
             hsample.set(i, binomial(1, hmean.get(i)));
         }
     }
 
     public void vsample_under_h(AVector vsample, AVector vmean, AVector hsample) {
         for (int i = 0; i < vnum; i++) {
-            vmean.set(i, down(hsample, weights.getColumn(i)));
+            vmean.set(i, down(hsample, weights.getRow(i)));
             vsample.set(i, binomial(1, vmean.get(i)));
         }
     }
@@ -57,14 +57,14 @@ public class RBlzmMLayer {
     }
 
     public void contrastive_divergence(int k, double learning_rate, AVector input) {
-        AVector phmean = Vectorz.createRepeatedElement(hnum + 1, 0);
-        AVector phsample = Vectorz.createRepeatedElement(hnum + 1, 0);
+        AVector phmean = zero(hnum + 1);
+        AVector phsample = zero(hnum + 1);
 
-        AVector nvmeans = Vectorz.createRepeatedElement(vnum + 1, 0);
-        AVector nvsamples = Vectorz.createRepeatedElement(vnum + 1, 0);
+        AVector nvmeans = zero(vnum + 1);
+        AVector nvsamples = zero(vnum + 1);
 
-        AVector nhmeans = Vectorz.createRepeatedElement(hnum + 1, 0);
-        AVector nhsamples = Vectorz.createRepeatedElement(hnum + 1, 0);
+        AVector nhmeans = zero(hnum + 1);
+        AVector nhsamples = zero(hnum + 1);
 
         hsample_under_v(phsample, phmean, input);
 
@@ -88,13 +88,13 @@ public class RBlzmMLayer {
     }
 
     public void reconstruct(AVector vrecons, AVector vsample) {
-        AVector h = Vectorz.newVector(hnum);
+        AVector h = Vectorz.newVector(hnum + 1);
 
-        for (int i = 0; i < hnum; i++) {
+        for (int i = 0; i < hnum + 1; i++) {
             h.set(i, up(vsample, weights.getColumn(i)));
         }
 
-        for (int i = 0; i < vnum; i++) {
+        for (int i = 0; i < vnum + 1; i++) {
             vrecons.set(i, sigmoid(weights.getRow(i).innerProduct(h).value));
         }
     }

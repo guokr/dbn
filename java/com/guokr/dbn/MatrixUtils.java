@@ -7,7 +7,9 @@ import mikera.arrayz.INDArray;
 import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.matrixx.Matrixx;
+import mikera.vectorz.AVector;
 import mikera.vectorz.Op;
+import mikera.vectorz.Vectorz;
 import mikera.vectorz.ops.ABoundedOp;
 import mikera.vectorz.ops.AFunctionOp;
 
@@ -60,6 +62,12 @@ public class MatrixUtils {
 
     public static Op opSoftmax(INDArray x) {
         return new SoftMax(x);
+    }
+
+    public static AVector zero(int dim) {
+        AVector v = Vectorz.newVector(dim);
+        v.fill(0);
+        return v;
     }
 
     public static IMatrix zero(int rows, int columns) {

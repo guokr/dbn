@@ -36,7 +36,20 @@ public class DBN {
         this.log_layer = new LogRgrsLayer(lsizes[lsizes.length - 2], this.onum);
     }
 
+    private AVector biased(AVector input) {
+        AVector b = Vectorz.newVector(input.length() + 1);
+        b.set(0, 1);
+        int i = 1;
+        for (double e : input.asDoubleArray()) {
+            b.set(i, e);
+            i++;
+        }
+        return b;
+    }
+
     public void pretrain(int k, int epochs, double learning_rate, AVector input) {
+        input = biased(input);
+        
         AVector icur, iprev;
 
         for (int i = 0; i < lnum - 2; i++) { // layer-wise
@@ -47,7 +60,7 @@ public class DBN {
                 for (int l = 1; l <= i; l++) {
                     iprev = icur.clone();
 
-                    icur = Vectorz.newVector(lsizes[l]);
+                    icur = biased(Vectorz.newVector(lsizes[l]));
                     sig_layers[l - 1].osample_under_i(icur, iprev);
                 }
 
@@ -57,15 +70,17 @@ public class DBN {
     }
 
     public void finetune(int epochs, double learning_rate, AVector input, AVector result) {
+        input = biased(input);
+        
         AVector icur, iprev;
         for (int epoch = 0; epoch < epochs; epoch++) {
             iprev = input;
-            icur = Vectorz.newVector(lsizes[1]);
+            icur = biased(Vectorz.newVector(lsizes[1]));
             sig_layers[0].osample_under_i(icur, iprev);
 
             for (int i = 1; i < lnum - 2; i++) {
                 iprev = icur.clone();
-                icur = Vectorz.newVector(lsizes[i + 1]);
+                icur = biased(Vectorz.newVector(lsizes[i + 1]));
                 sig_layers[i].osample_under_i(icur, iprev);
             }
 
@@ -74,6 +89,8 @@ public class DBN {
     }
 
     public AVector predict(AVector input) {
+        input = biased(input);
+        
         AVector icur = null, iprev = input;
 
         for (int i = 1; i < lnum - 1; i++) {
