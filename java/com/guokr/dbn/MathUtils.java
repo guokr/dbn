@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Random;
 
 public class MathUtils {
-    
+
     public static Random rand = new Random(new Date().getTime());
 
     public static double uniform(double min, double max) {

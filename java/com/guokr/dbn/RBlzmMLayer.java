@@ -9,13 +9,13 @@ import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
-public class RBlzmnMLayer {
+public class RBlzmMLayer {
 
     public int     vnum;
     public int     hnum;
     public IMatrix weights;
 
-    public RBlzmnMLayer(int vnum, int hnum, IMatrix weights) {
+    public RBlzmMLayer(int vnum, int hnum, IMatrix weights) {
         this.vnum = vnum;
         this.hnum = hnum;
 

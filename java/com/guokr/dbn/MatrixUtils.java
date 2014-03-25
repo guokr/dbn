@@ -1,11 +1,66 @@
 package com.guokr.dbn;
 
+import static com.guokr.dbn.MathUtils.sigmoid;
 import static com.guokr.dbn.MathUtils.uniform;
+import static java.lang.Math.exp;
+import mikera.arrayz.INDArray;
 import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.matrixx.Matrixx;
+import mikera.vectorz.Op;
+import mikera.vectorz.ops.ABoundedOp;
+import mikera.vectorz.ops.AFunctionOp;
 
 public class MatrixUtils {
+
+    public static class SoftMax extends ABoundedOp {
+
+        private double max, sum = 0;
+
+        public SoftMax(INDArray array) {
+            max = array.elementMax();
+            for (double elem : array.toDoubleArray()) {
+                sum += exp(elem - max);
+            }
+        }
+
+        @Override
+        public double maxValue() {
+            return 1;
+        }
+
+        @Override
+        public double minValue() {
+            return 0;
+        }
+
+        @Override
+        public double apply(double x) {
+            return exp(x - max) / sum;
+        }
+
+    }
+
+    public static Op opSigmoid = new AFunctionOp() {
+                                   @Override
+                                   public double apply(double x) {
+                                       return sigmoid(x);
+                                   }
+
+                                   @Override
+                                   public double minValue() {
+                                       return 0;
+                                   }
+
+                                   @Override
+                                   public double maxValue() {
+                                       return 1;
+                                   }
+                               };
+
+    public static Op opSoftmax(INDArray x) {
+        return new SoftMax(x);
+    }
 
     public static IMatrix zero(int rows, int columns) {
         AMatrix m = Matrixx.newMatrix(rows, columns);
