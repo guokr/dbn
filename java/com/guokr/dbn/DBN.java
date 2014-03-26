@@ -3,7 +3,7 @@ package com.guokr.dbn;
 import static com.guokr.dbn.ANNUtils.biased;
 import static com.guokr.dbn.MatrixUtils.opSigmoid;
 import static com.guokr.dbn.MatrixUtils.opSoftmax;
-import mikera.matrixx.IMatrix;
+import static com.guokr.dbn.MatrixUtils.transpose;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
@@ -34,27 +34,25 @@ public class DBN {
 
             SigmoidLayer sigmoidLayer = new SigmoidLayer(isize, osize);
             this.sig_layers[i] = sigmoidLayer;
-            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, (IMatrix)sigmoidLayer.weights.getTransposeView());
+            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, transpose(sigmoidLayer.weights));
         }
 
         this.log_layer = new LogRgrsLayer(lsizes[lsizes.length - 2], this.onum);
     }
 
     public void pretrain(int k, int epochs, double learning_rate, AVector input) {
-        input = biased(input);
-
-        AVector icur, iprev;
-
+        AVector icur = null, iprev = null;
         for (int i = 0; i < lnum - 2; i++) { // layer-wise
             for (int epoch = 0; epoch < epochs; epoch++) { // training epochs
+                for (int l = 0; l <= i; l++) {
+                    if (l == 0) {
+                        icur = biased(input);
+                    } else {
+                        iprev = icur.clone();
 
-                icur = input;
-
-                for (int l = 1; l <= i; l++) {
-                    iprev = icur.clone();
-
-                    icur = biased(lsizes[l]);
-                    sig_layers[l - 1].osample_under_i(icur, iprev);
+                        icur = biased(lsizes[l]);
+                        sig_layers[l - 1].osample_under_i(icur, iprev);
+                    }
                 }
 
                 rbm_layers[i].contrastive_divergence(k, learning_rate, icur);

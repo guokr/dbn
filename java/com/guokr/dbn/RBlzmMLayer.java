@@ -1,10 +1,13 @@
 package com.guokr.dbn;
 
+import static com.guokr.dbn.ANNUtils.biased;
 import static com.guokr.dbn.MathUtils.binomial;
 import static com.guokr.dbn.MathUtils.sigmoid;
 import static com.guokr.dbn.MatrixUtils.compose22;
 import static com.guokr.dbn.MatrixUtils.random;
+import static com.guokr.dbn.MatrixUtils.tensorProduct;
 import static com.guokr.dbn.MatrixUtils.zero;
+import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
@@ -13,9 +16,9 @@ public class RBlzmMLayer {
 
     public int     vnum;
     public int     hnum;
-    public IMatrix weights;
+    public AMatrix weights;
 
-    public RBlzmMLayer(int vnum, int hnum, IMatrix weights) {
+    public RBlzmMLayer(int vnum, int hnum, AMatrix weights) {
         this.vnum = vnum;
         this.hnum = hnum;
 
@@ -30,27 +33,29 @@ public class RBlzmMLayer {
     }
 
     public double up(AVector vsample, AVector vweight) {
-        vweight.set(0, 1);
         return sigmoid(vsample.innerProduct(vweight).value);
     }
 
     public double down(AVector hsample, AVector hweight) {
-        hweight.set(0, 1);
         return sigmoid(hsample.innerProduct(hweight).value);
     }
 
     public void hsample_under_v(AVector hsample, AVector hmean, AVector vsample) {
-        for (int i = 0; i < hnum; i++) {
+        for (int i = 0; i < hnum + 1; i++) {
             hmean.set(i, up(vsample, weights.getColumn(i)));
             hsample.set(i, binomial(1, hmean.get(i)));
         }
+        hmean.set(0, 1);
+        hsample.set(0, 1);
     }
 
     public void vsample_under_h(AVector vsample, AVector vmean, AVector hsample) {
-        for (int i = 0; i < vnum; i++) {
+        for (int i = 0; i < vnum + 1; i++) {
             vmean.set(i, down(hsample, weights.getRow(i)));
             vsample.set(i, binomial(1, vmean.get(i)));
         }
+        vmean.set(0, 1);
+        vsample.set(0, 1);
     }
 
     public void gibbs_hvh(AVector hpsample, AVector nvmeans, AVector nvsamples, AVector nhmeans, AVector nhsamples) {
@@ -59,14 +64,14 @@ public class RBlzmMLayer {
     }
 
     public void contrastive_divergence(int k, double learning_rate, AVector input) {
-        AVector phmean = zero(hnum + 1);
-        AVector phsample = zero(hnum + 1);
+        AVector phmean = biased(hnum);
+        AVector phsample = biased(hnum);
 
-        AVector nvmeans = zero(vnum + 1);
-        AVector nvsamples = zero(vnum + 1);
+        AVector nvmeans = biased(vnum);
+        AVector nvsamples = biased(vnum);
 
-        AVector nhmeans = zero(hnum + 1);
-        AVector nhsamples = zero(hnum + 1);
+        AVector nhmeans = biased(hnum);
+        AVector nhsamples = biased(hnum);
 
         hsample_under_v(phsample, phmean, input);
 
@@ -77,12 +82,12 @@ public class RBlzmMLayer {
                 gibbs_hvh(nhsamples, nvmeans, nvsamples, nhmeans, nhsamples);
             }
         }
-        
-        input.set(0, 1.0 / vnum);
-        nvsamples.set(0, 1.0 / vnum);
 
-        IMatrix mp = input.outerProduct(phmean);
-        IMatrix mn = nvsamples.outerProduct(nhmeans);
+        IMatrix mp = tensorProduct(input, phmean);
+        IMatrix mn = tensorProduct(nvsamples, nhmeans);
+
+        System.out.println(phmean);
+        System.out.println(nhmeans);
 
         mp.scale(learning_rate);
         mn.scale(-learning_rate);
@@ -90,11 +95,7 @@ public class RBlzmMLayer {
         weights.add(mp);
         weights.add(mn);
 
-        for (int i = 1; i < vnum + 1; i++) {
-            double val = weights.get(i, 0);
-            weights.set(i, 0, val + learning_rate * (input.get(i) - nvsamples.get(i)));
-        }
-
+        System.out.println(weights);
     }
 
     public void reconstruct(AVector vrecons, AVector vsample) {

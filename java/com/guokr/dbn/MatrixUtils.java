@@ -138,7 +138,7 @@ public class MatrixUtils {
         return m;
     }
 
-    public static IMatrix compose22(IMatrix m11, IMatrix m12, IMatrix m21, IMatrix m22) {
+    public static AMatrix compose22(IMatrix m11, IMatrix m12, IMatrix m21, IMatrix m22) {
         int r1 = m11.rowCount(), r2 = m22.rowCount(), r = r1 + r2;
         int c1 = m11.columnCount(), c2 = m22.columnCount(), c = c1 + c2;
         AMatrix m = Matrixx.newMatrix(r, c);
@@ -163,6 +163,55 @@ public class MatrixUtils {
             }
         }
         return m;
+    }
+
+    public static IMatrix tensorProduct(AVector a, AVector b) {
+        int alen = a.length(), blen = b.length();
+        AMatrix m = Matrixx.newMatrix(alen, blen);
+        for (int i = 0; i < alen; i++) {
+            for (int j = 0; j < blen; j++) {
+                m.set(i, j, a.get(i) * b.get(j));
+            }
+        }
+        return m;
+    }
+
+    public static AMatrix transpose(final AMatrix m) {
+        return new AMatrix() {
+
+            private static final long serialVersionUID = 7582775908242448103L;
+
+            @Override
+            public int rowCount() {
+                return m.columnCount();
+            }
+
+            @Override
+            public int columnCount() {
+                return m.rowCount();
+            }
+
+            @Override
+            public boolean isFullyMutable() {
+                return true;
+            }
+
+            @Override
+            public double get(int row, int col) {
+                return m.get(col, row);
+            }
+
+            @Override
+            public void set(int row, int col, double val) {
+                m.set(col, row, val);
+            }
+
+            @Override
+            public AMatrix exactClone() {
+                return transpose(m.clone());
+            }
+
+        };
     }
 
 }

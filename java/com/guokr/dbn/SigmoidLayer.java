@@ -5,14 +5,14 @@ import static com.guokr.dbn.MathUtils.sigmoid;
 import static com.guokr.dbn.MatrixUtils.compose22;
 import static com.guokr.dbn.MatrixUtils.random;
 import static com.guokr.dbn.MatrixUtils.zero;
-import static com.guokr.dbn.MatrixUtils.one;
+import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 
 public class SigmoidLayer {
     public int     inum;
     public int     onum;
-    public IMatrix weights;
+    public AMatrix weights;
 
     public SigmoidLayer(int inum, int onum) {
         this.inum = inum;
@@ -21,12 +21,14 @@ public class SigmoidLayer {
         double alpha = 1.0 / this.inum;
         IMatrix rand = random(onum, inum, -alpha, alpha);
 
-        this.weights = compose22(zero(1, 1), zero(1, inum), one(onum, 1), rand);
+        this.weights = compose22(zero(1, 1), zero(1, inum), zero(onum, 1), rand);
     }
 
     public void osample_under_i(AVector osample, AVector isample) {
-        for (int i = 1; i < onum + 1; i++) {
+        for (int i = 0; i < onum + 1; i++) {
+            isample.set(0, 1);
             osample.set(i, binomial(1, sigmoid(isample.innerProduct(weights.getRow(i)).value)));
+            osample.set(0, 1);
         }
     }
 }

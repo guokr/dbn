@@ -17,7 +17,7 @@ public class DBNTest {
         // pretrain
 
         int k = 1;
-        double pretrain_lr = 0.1;
+        double pretrain_lr = 0.1 / 6;
         int pretraining_epochs = 1000;
 
         double[][] traindata = { { 1, 1, 1, 0, 0, 0 }, { 1, 0, 1, 0, 0, 0 }, { 1, 1, 1, 0, 0, 0 },
@@ -38,7 +38,8 @@ public class DBNTest {
             dbn.finetune(finetune_epochs, finetune_lr, Vectorz.create(traindata[i]), Vectorz.create(tunedata[i]));
         }
 
-        // test data
+        // test
+
         double[][] testdata = { { 1, 1, 0, 0, 0, 0 }, { 1, 1, 1, 1, 0, 0 }, { 0, 0, 0, 1, 1, 0 }, { 0, 0, 1, 1, 1, 0 }, };
         double[][] results = { { 1, 0 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, };
 
