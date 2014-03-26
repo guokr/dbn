@@ -58,8 +58,8 @@ public class RBlzmMLayer {
         vsample.set(0, 1);
     }
 
-    public void gibbs_hvh(AVector hpsample, AVector nvmeans, AVector nvsamples, AVector nhmeans, AVector nhsamples) {
-        vsample_under_h(nvsamples, nvmeans, hpsample);
+    public void gibbs_hvh(AVector phsample, AVector nvmeans, AVector nvsamples, AVector nhmeans, AVector nhsamples) {
+        vsample_under_h(nvsamples, nvmeans, phsample);
         hsample_under_v(nhsamples, nhmeans, nvsamples);
     }
 
@@ -86,16 +86,11 @@ public class RBlzmMLayer {
         IMatrix mp = tensorProduct(input, phmean);
         IMatrix mn = tensorProduct(nvsamples, nhmeans);
 
-        System.out.println(phmean);
-        System.out.println(nhmeans);
-
         mp.scale(learning_rate);
         mn.scale(-learning_rate);
 
         weights.add(mp);
         weights.add(mn);
-
-        System.out.println(weights);
     }
 
     public void reconstruct(AVector vrecons, AVector vsample) {

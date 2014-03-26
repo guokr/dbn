@@ -2,6 +2,7 @@ package com.guokr.dbn;
 
 import static com.guokr.dbn.MatrixUtils.compose12;
 import static com.guokr.dbn.MatrixUtils.opSoftmax;
+import static com.guokr.dbn.MatrixUtils.tensorProduct;
 import static com.guokr.dbn.MatrixUtils.zero;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
@@ -30,7 +31,7 @@ public class LogRgrsLayer {
         dy.add(py_x);
         dy.scale(learning_rate);
 
-        this.weights.add(dy.outerProduct(x));
+        this.weights.add(tensorProduct(dy, x));
     }
 
     public void predict(AVector x, AVector y) {
