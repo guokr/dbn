@@ -1,9 +1,9 @@
-package com.guokr.dbn.layers;
+package com.guokr.dplearn.layers;
 
-import static com.guokr.dbn.util.MatrixUtils.compose12;
-import static com.guokr.dbn.util.MatrixUtils.opSoftmax;
-import static com.guokr.dbn.util.MatrixUtils.tensorProduct;
-import static com.guokr.dbn.util.MatrixUtils.zero;
+import static com.guokr.dplearn.util.MatrixUtils.compose12;
+import static com.guokr.dplearn.util.MatrixUtils.opSoftmax;
+import static com.guokr.dplearn.util.MatrixUtils.tensorProduct;
+import static com.guokr.dplearn.util.MatrixUtils.zero;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;

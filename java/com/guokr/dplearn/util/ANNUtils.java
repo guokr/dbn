@@ -1,6 +1,6 @@
-package com.guokr.dbn.util;
+package com.guokr.dplearn.util;
 
-import static com.guokr.dbn.util.MatrixUtils.zero;
+import static com.guokr.dplearn.util.MatrixUtils.zero;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 

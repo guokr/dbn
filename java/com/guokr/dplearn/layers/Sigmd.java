@@ -1,10 +1,10 @@
-package com.guokr.dbn.layers;
+package com.guokr.dplearn.layers;
 
-import static com.guokr.dbn.util.MathUtils.binomial;
-import static com.guokr.dbn.util.MathUtils.sigmoid;
-import static com.guokr.dbn.util.MatrixUtils.compose22;
-import static com.guokr.dbn.util.MatrixUtils.random;
-import static com.guokr.dbn.util.MatrixUtils.zero;
+import static com.guokr.dplearn.util.MathUtils.binomial;
+import static com.guokr.dplearn.util.MathUtils.sigmoid;
+import static com.guokr.dplearn.util.MatrixUtils.compose22;
+import static com.guokr.dplearn.util.MatrixUtils.random;
+import static com.guokr.dplearn.util.MatrixUtils.zero;
 import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;

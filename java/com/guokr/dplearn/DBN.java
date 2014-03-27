@@ -1,13 +1,13 @@
-package com.guokr.dbn;
+package com.guokr.dplearn;
 
-import static com.guokr.dbn.util.ANNUtils.biased;
-import static com.guokr.dbn.util.MatrixUtils.opSigmoid;
-import static com.guokr.dbn.util.MatrixUtils.opSoftmax;
-import static com.guokr.dbn.util.MatrixUtils.transpose;
+import static com.guokr.dplearn.util.ANNUtils.biased;
+import static com.guokr.dplearn.util.MatrixUtils.opSigmoid;
+import static com.guokr.dplearn.util.MatrixUtils.opSoftmax;
+import static com.guokr.dplearn.util.MatrixUtils.transpose;
 
-import com.guokr.dbn.layers.LogR;
-import com.guokr.dbn.layers.RBM;
-import com.guokr.dbn.layers.Sigmd;
+import com.guokr.dplearn.layers.LogR;
+import com.guokr.dplearn.layers.RBM;
+import com.guokr.dplearn.layers.Sigmd;
 
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
