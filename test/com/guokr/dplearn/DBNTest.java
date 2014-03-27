@@ -1,4 +1,4 @@
-package com.guokr.dbn;
+package com.guokr.dplearn;
 
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
