@@ -1,4 +1,4 @@
-package com.guokr.dbn;
+package com.guokr.dbn.util;
 
 import static java.lang.Math.E;
 import static java.lang.Math.pow;

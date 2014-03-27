@@ -1,19 +1,19 @@
-package com.guokr.dbn;
+package com.guokr.dbn.layers;
 
-import static com.guokr.dbn.MatrixUtils.compose12;
-import static com.guokr.dbn.MatrixUtils.opSoftmax;
-import static com.guokr.dbn.MatrixUtils.tensorProduct;
-import static com.guokr.dbn.MatrixUtils.zero;
+import static com.guokr.dbn.util.MatrixUtils.compose12;
+import static com.guokr.dbn.util.MatrixUtils.opSoftmax;
+import static com.guokr.dbn.util.MatrixUtils.tensorProduct;
+import static com.guokr.dbn.util.MatrixUtils.zero;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
-public class LogRgrsLayer {
+public class LogR {
     public int     inum;
     public int     onum;
     public IMatrix weights;
 
-    public LogRgrsLayer(int inum, int onum) {
+    public LogR(int inum, int onum) {
         this.inum = inum;
         this.onum = onum;
 

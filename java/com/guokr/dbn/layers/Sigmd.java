@@ -1,20 +1,20 @@
-package com.guokr.dbn;
+package com.guokr.dbn.layers;
 
-import static com.guokr.dbn.MathUtils.binomial;
-import static com.guokr.dbn.MathUtils.sigmoid;
-import static com.guokr.dbn.MatrixUtils.compose22;
-import static com.guokr.dbn.MatrixUtils.random;
-import static com.guokr.dbn.MatrixUtils.zero;
+import static com.guokr.dbn.util.MathUtils.binomial;
+import static com.guokr.dbn.util.MathUtils.sigmoid;
+import static com.guokr.dbn.util.MatrixUtils.compose22;
+import static com.guokr.dbn.util.MatrixUtils.random;
+import static com.guokr.dbn.util.MatrixUtils.zero;
 import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 
-public class SigmoidLayer {
+public class Sigmd {
     public int     inum;
     public int     onum;
     public AMatrix weights;
 
-    public SigmoidLayer(int inum, int onum) {
+    public Sigmd(int inum, int onum) {
         this.inum = inum;
         this.onum = onum;
 

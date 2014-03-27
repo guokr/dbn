@@ -1,7 +1,7 @@
-package com.guokr.dbn;
+package com.guokr.dbn.util;
 
-import static com.guokr.dbn.MathUtils.sigmoid;
-import static com.guokr.dbn.MathUtils.uniform;
+import static com.guokr.dbn.util.MathUtils.sigmoid;
+import static com.guokr.dbn.util.MathUtils.uniform;
 import static java.lang.Math.exp;
 import mikera.arrayz.INDArray;
 import mikera.matrixx.AMatrix;

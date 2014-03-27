@@ -1,24 +1,24 @@
-package com.guokr.dbn;
+package com.guokr.dbn.layers;
 
-import static com.guokr.dbn.ANNUtils.biased;
-import static com.guokr.dbn.MathUtils.binomial;
-import static com.guokr.dbn.MathUtils.sigmoid;
-import static com.guokr.dbn.MatrixUtils.compose22;
-import static com.guokr.dbn.MatrixUtils.random;
-import static com.guokr.dbn.MatrixUtils.tensorProduct;
-import static com.guokr.dbn.MatrixUtils.zero;
+import static com.guokr.dbn.util.ANNUtils.biased;
+import static com.guokr.dbn.util.MathUtils.binomial;
+import static com.guokr.dbn.util.MathUtils.sigmoid;
+import static com.guokr.dbn.util.MatrixUtils.compose22;
+import static com.guokr.dbn.util.MatrixUtils.random;
+import static com.guokr.dbn.util.MatrixUtils.tensorProduct;
+import static com.guokr.dbn.util.MatrixUtils.zero;
 import mikera.matrixx.AMatrix;
 import mikera.matrixx.IMatrix;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
-public class RBlzmMLayer {
+public class RBM {
 
     public int     vnum;
     public int     hnum;
     public AMatrix weights;
 
-    public RBlzmMLayer(int vnum, int hnum, AMatrix weights) {
+    public RBM(int vnum, int hnum, AMatrix weights) {
         this.vnum = vnum;
         this.hnum = hnum;
 

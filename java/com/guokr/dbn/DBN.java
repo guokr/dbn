@@ -1,9 +1,14 @@
 package com.guokr.dbn;
 
-import static com.guokr.dbn.ANNUtils.biased;
-import static com.guokr.dbn.MatrixUtils.opSigmoid;
-import static com.guokr.dbn.MatrixUtils.opSoftmax;
-import static com.guokr.dbn.MatrixUtils.transpose;
+import static com.guokr.dbn.util.ANNUtils.biased;
+import static com.guokr.dbn.util.MatrixUtils.opSigmoid;
+import static com.guokr.dbn.util.MatrixUtils.opSoftmax;
+import static com.guokr.dbn.util.MatrixUtils.transpose;
+
+import com.guokr.dbn.layers.LogR;
+import com.guokr.dbn.layers.RBM;
+import com.guokr.dbn.layers.Sigmd;
+
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
@@ -15,9 +20,9 @@ public class DBN {
     public int            lnum;
     public int[]          lsizes;
 
-    public SigmoidLayer[] sig_layers;
-    public RBlzmMLayer[]  rbm_layers;
-    public LogRgrsLayer   log_layer;
+    public Sigmd[] sig_layers;
+    public RBM[]  rbm_layers;
+    public LogR   log_layer;
 
     public DBN(int[] lsizes) {
         this.inum = lsizes[0];
@@ -25,19 +30,19 @@ public class DBN {
         this.lnum = lsizes.length;
         this.lsizes = lsizes;
 
-        this.sig_layers = new SigmoidLayer[this.lnum - 2];
-        this.rbm_layers = new RBlzmMLayer[this.lnum - 2];
+        this.sig_layers = new Sigmd[this.lnum - 2];
+        this.rbm_layers = new RBM[this.lnum - 2];
 
         for (int i = 0; i < this.lnum - 2; i++) {
             int isize = lsizes[i];
             int osize = lsizes[i + 1];
 
-            SigmoidLayer sigmoidLayer = new SigmoidLayer(isize, osize);
+            Sigmd sigmoidLayer = new Sigmd(isize, osize);
             this.sig_layers[i] = sigmoidLayer;
-            this.rbm_layers[i] = new RBlzmMLayer(isize, osize, transpose(sigmoidLayer.weights));
+            this.rbm_layers[i] = new RBM(isize, osize, transpose(sigmoidLayer.weights));
         }
 
-        this.log_layer = new LogRgrsLayer(lsizes[lsizes.length - 2], this.onum);
+        this.log_layer = new LogR(lsizes[lsizes.length - 2], this.onum);
     }
 
     public void pretrain(int k, double learning_rate, AVector input) {
@@ -81,7 +86,7 @@ public class DBN {
         AVector icur = null, iprev = input;
 
         for (int i = 0; i < lnum - 2; i++) {
-            SigmoidLayer lcur = sig_layers[i];
+            Sigmd lcur = sig_layers[i];
 
             icur = lcur.weights.transform(iprev);
             icur.applyOp(opSigmoid);

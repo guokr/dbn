@@ -1,6 +1,6 @@
-package com.guokr.dbn;
+package com.guokr.dbn.util;
 
-import static com.guokr.dbn.MatrixUtils.zero;
+import static com.guokr.dbn.util.MatrixUtils.zero;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
