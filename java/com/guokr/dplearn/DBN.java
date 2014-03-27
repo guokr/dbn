@@ -14,15 +14,15 @@ import mikera.vectorz.Vectorz;
 
 public class DBN {
 
-    public int            inum;
-    public int            onum;
+    public int     inum;
+    public int     onum;
 
-    public int            lnum;
-    public int[]          lsizes;
+    public int     lnum;
+    public int[]   lsizes;
 
     public Sigmd[] sig_layers;
-    public RBM[]  rbm_layers;
-    public LogR   log_layer;
+    public RBM[]   rbm_layers;
+    public LogR    log_layer;
 
     public DBN(int[] lsizes) {
         this.inum = lsizes[0];

@@ -14,7 +14,7 @@ public class MathUtils {
         return rand.nextDouble() * (max - min) + min;
     }
 
-    public static int binomial(int n, double p) {
+    public static double binomial(int n, double p) {
         if (p < 0 || p > 1) {
             return 0;
         }
