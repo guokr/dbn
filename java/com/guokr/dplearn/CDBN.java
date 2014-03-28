@@ -9,6 +9,7 @@ import mikera.vectorz.Vectorz;
 
 import com.guokr.dplearn.layers.CRBM;
 import com.guokr.dplearn.layers.LogR;
+import com.guokr.dplearn.layers.RBM;
 import com.guokr.dplearn.layers.Sigmd;
 
 public class CDBN {
@@ -20,7 +21,7 @@ public class CDBN {
     public int[]   lsizes;
 
     public Sigmd[] sig_layers;
-    public CRBM[]  rbm_layers;
+    public RBM[]   rbm_layers;
     public LogR    log_layer;
 
     public CDBN(int[] lsizes) {
@@ -30,7 +31,7 @@ public class CDBN {
         this.lsizes = lsizes;
 
         this.sig_layers = new Sigmd[this.lnum - 2];
-        this.rbm_layers = new CRBM[this.lnum - 2];
+        this.rbm_layers = new RBM[this.lnum - 2];
 
         for (int i = 0; i < this.lnum - 2; i++) {
             int isize = lsizes[i];
@@ -38,7 +39,11 @@ public class CDBN {
 
             Sigmd sigmoidLayer = new Sigmd(isize, osize);
             this.sig_layers[i] = sigmoidLayer;
-            this.rbm_layers[i] = new CRBM(isize, osize, transpose(sigmoidLayer.weights));
+            if (i == 0) {
+                this.rbm_layers[i] = new CRBM(isize, osize, transpose(sigmoidLayer.weights));
+            } else {
+                this.rbm_layers[i] = new RBM(isize, osize, transpose(sigmoidLayer.weights));
+            }
         }
 
         this.log_layer = new LogR(lsizes[lsizes.length - 2], this.onum);
