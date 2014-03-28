@@ -71,12 +71,10 @@ public class IrisFlowerTest {
 
     private AVector normalize(AVector data) {
         data.add(Vectorz.create(-4.3, -2.0, -1.0, -0.1));
-        return Matrixx.createDiagonalMatrix(
-                1/(7.9 - 4.3),
-                1/(4.4 - 2.0),
-                1/(6.9 - 1.0),
-                1/(2.5 - 0.1)).transform(data);
+        return Matrixx.createDiagonalMatrix(1 / (7.9 - 4.3), 1 / (4.4 - 2.0), 1 / (6.9 - 1.0), 1 / (2.5 - 0.1))
+                .transform(data);
     }
+
     @Test
     public void test() {
         int[] sizes_per_layer = { 4, 8, 8, 3 };
