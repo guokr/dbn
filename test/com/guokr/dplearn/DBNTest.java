@@ -6,8 +6,6 @@ import mikera.vectorz.Vectorz;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.guokr.dplearn.DBN;
-
 public class DBNTest {
 
     @Test

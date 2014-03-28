@@ -1,58 +1,50 @@
 package com.guokr.dplearn;
 
-import static java.lang.Math.*;
-
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.random;
+import static java.lang.Math.sin;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.guokr.dplearn.DBN;
-
 public class CDBNTest {
 
     public double s(double x) {
-        return (1 + x) / 2;
+        return (7 + x) / 14;
     }
 
-    public AVector knots(double p, double q) {
-        double theta = 2 * PI * p;
-        double phi = 2 * PI * q;
+    public AVector key(double p, double q) {
+        return Vectorz.create(Math.round(p), Math.round(q));
+    }
 
-        // (2,3)-torus knot or Trefoil knot
-        // https://en.wikipedia.org/wiki/Torus_knot
-        // https://en.wikipedia.org/wiki/Trefoil_knot
-        double x = (sin(theta) + 2 * sin(2 * theta)) / 3;
-        double y = (cos(theta) - 2 * cos(2 * theta)) / 3;
-        double z = -sin(3 * theta);
+    public AVector bitorus(double p, double q) {
+        double theta = 2 * PI * random();
+        double phi = 2 * PI * random();
 
-        // (2,3)-torus knot
-        // https://en.wikipedia.org/wiki/Torus_knot
-        double u = ((cos(3 * phi) + 2) * cos(2 * phi)) / 3;
-        double v = ((cos(3 * phi) + 2) * sin(2 * phi)) / 3;
-        double w = -sin(3 * phi);
+        double R = 5;
+        double r = 0.5;
+
+        // torus
+        // https://en.wikipedia.org/wiki/Torus
+        double x = (R + (r + p) * cos(phi)) * cos(theta);
+        double y = (R + (r + p) * cos(phi)) * sin(theta);
+        double z = (r + p) * sin(phi);
+
+        double u = (R + (r + q) * cos(theta)) * cos(phi);
+        double v = (R + (r + q) * cos(theta)) * sin(phi);
+        double w = (r + q) * sin(theta);
 
         return Vectorz.create(s(x), s(y), s(z), s(u), s(v), s(w));
-    }
-
-    public AVector kleinbottle(double p, double q) {
-        double theta = 2 * PI * p;
-        double phi = 2 * PI * q;
-
-        double x = (cos(theta / 2) * cos(phi) - sin(theta / 2) * sin(2 * phi)) / 2;
-        double y = (sin(theta / 2) * cos(phi) - cos(theta / 2) * sin(2 * phi)) / 2;
-        double z = cos(theta) * (1 + sin(phi)) / 2;
-        double w = sin(theta) * (1 + sin(phi)) / 2;
-
-        return Vectorz.create(s(x), s(y), s(z), s(w));
     }
 
     @Test
     public void test() {
 
-        int[] sizes_per_layer = { 4, 8, 16, 8, 4, 2 };
-        DBN dbn = new DBN(sizes_per_layer);
+        int[] sizes_per_layer = { 6, 12, 24, 12, 6, 2 };
+        CDBN cdbn = new CDBN(sizes_per_layer);
 
         // pretrain
 
@@ -61,34 +53,36 @@ public class CDBNTest {
         int pretraining_epochs = 10000;
 
         for (int i = 0; i < pretraining_epochs; i++) {
-            dbn.pretrain(k, pretrain_lr, kleinbottle(random(), random()));
+            cdbn.pretrain(k, pretrain_lr, bitorus(random(), random()));
         }
 
         // finetune
 
         double finetune_lr = 0.01;
-        int finetune_epochs = 1000;
+        int finetune_epochs = 10000;
 
         for (int i = 0; i < finetune_epochs; i++) {
             double p = random();
             double q = random();
-            AVector key = kleinbottle(p, q);
-            AVector val = Vectorz.create(p, q);
-            dbn.finetune(finetune_lr, key, val);
+            cdbn.finetune(finetune_lr, bitorus(p, q), key(p, q));
         }
 
         // test
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             double p = random();
             double q = random();
-            AVector input = kleinbottle(p, q);
+            AVector input = bitorus(p, q);
 
-            AVector output = dbn.predict(input);
-            AVector test = Vectorz.create(p, q);
+            AVector output = cdbn.predict(input);
+            AVector test = key(p, q);
 
-            System.out.println("result:" + output + ", expected:" + test);
-            Assert.assertTrue("error is greater than expected!", test.epsilonEquals(output, 0.1));
+            System.out.println("input:" + input);
+            System.out.println("output:" + output);
+            System.out.println("expected:" + test);
+            System.out.println(test.epsilonEquals(output, 0.1));
+            Assert.assertTrue("error is greater than expected!",
+            test.epsilonEquals(output, 0.1));
         }
     }
 
