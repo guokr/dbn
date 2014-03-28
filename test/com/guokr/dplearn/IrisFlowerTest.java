@@ -4,6 +4,7 @@ import mikera.matrixx.Matrixx;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class IrisFlowerTest {
@@ -36,7 +37,8 @@ public class IrisFlowerTest {
             { 6.7, 3.3, 5.7, 2.5, }, { 6.7, 3.0, 5.2, 2.3, }, { 6.3, 2.5, 5.0, 1.9, }, { 6.5, 3.0, 5.2, 2.0, },
             { 6.2, 3.4, 5.4, 2.3, }, { 5.9, 3.0, 5.1, 1.8, }, };
 
-    public static double[][] iriscats = { { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 },
+    public static double[][] iriscats = {
+            { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 },
             { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 },
             { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 },
             { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 1.0, 0.0, 0.0 },
@@ -57,15 +59,6 @@ public class IrisFlowerTest {
             { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 },
             { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 1.0, 0.0 },
             { 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
-            { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 1.0 },
             { 0.0, 0.0, 1.0 },       };
 
     private AVector normalize(AVector data) {
@@ -94,7 +87,7 @@ public class IrisFlowerTest {
 
         // finetune
 
-        double finetune_lr = 0.01;
+        double finetune_lr = 0.1;
         int finetune_epochs = 1000;
 
         for (int i = 0; i < finetune_epochs; i++) {
@@ -106,7 +99,7 @@ public class IrisFlowerTest {
 
         // test
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 105; i = i + 5) {
             AVector input = normalize(Vectorz.create(irisdata[i]));
 
             AVector output = cdbn.predict(input);
@@ -114,8 +107,8 @@ public class IrisFlowerTest {
 
             System.out.println("output:" + output);
             System.out.println("expected:" + test);
-            // Assert.assertTrue("error is greater than expected!",
-            // test.epsilonEquals(output, 0.5));
+            Assert.assertTrue("error is greater than expected!",
+            test.epsilonEquals(output, 0.5));
         }
     }
 }
