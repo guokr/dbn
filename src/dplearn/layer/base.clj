@@ -11,7 +11,7 @@
   (defn sample-down [this hsample])
   (defn gibbs-hvh [this hsample])
   (defn mini-batch [this k hsample])
-  (defn contrastive-divergence [this k lr vinput]))
+  (defn contra-div! [this k lr vinput]))
 
 (defrecord NeuronLayer [weights
                         fn-activition-up  fn-activition-down
@@ -55,7 +55,7 @@
         (tuple nvmeans nhsample)
         (recur (dec i) (gibbs-hvh this nhsample)))))
 
-  (defn contrastive-divergence! [this k lr vsample])
+  (defn contra-div! [this k lr vsample])
     (let [[hmeans hsample] (sample-up this vinput)
           [nvmeans nhsample] (mini-batch this k hsample)
           mw (:weights this)
@@ -66,3 +66,15 @@
         (add! mw (scale mn (- lr)))
         this)))
 
+(defmacro defnnkind [docstring kind-name & {:as args}]
+  (let [kind-name#                (symbol kind-name)
+        weights-name#             (symbol (str "weights-" kind-name))
+        invoke-up-name#           (symbol (str "invoke-up-" kind-name))
+        invoke-down-name#         (symbol (str "invoke-down-" kind-name))
+        fan-in#                   (:fan-in args)
+        fan-out#                  (:fan-out args)
+        activition-up#            (or (:activition-up args) (fn [ctx] ctx))
+        activition-down#          (or (:activition-down args) (fn [ctx] ctx))]
+    `(do
+       (def ~kind-name#
+         (fn [] )))))
