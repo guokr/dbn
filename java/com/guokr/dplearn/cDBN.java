@@ -7,12 +7,12 @@ import static com.guokr.dplearn.util.MatrixUtils.transpose;
 import mikera.vectorz.AVector;
 import mikera.vectorz.Vectorz;
 
-import com.guokr.dplearn.layers.CRBM;
+import com.guokr.dplearn.layers.cRBM;
 import com.guokr.dplearn.layers.LogR;
 import com.guokr.dplearn.layers.RBM;
 import com.guokr.dplearn.layers.Sigmd;
 
-public class CDBN {
+public class cDBN {
 
     public int     inum;
     public int     onum;
@@ -24,7 +24,7 @@ public class CDBN {
     public RBM[]   rbm_layers;
     public LogR    log_layer;
 
-    public CDBN(int[] lsizes) {
+    public cDBN(int[] lsizes) {
         this.inum = lsizes[0];
         this.onum = lsizes[lsizes.length - 1];
         this.lnum = lsizes.length;
@@ -40,7 +40,7 @@ public class CDBN {
             Sigmd sigmoidLayer = new Sigmd(isize, osize);
             this.sig_layers[i] = sigmoidLayer;
             if (i == 0) {
-                this.rbm_layers[i] = new CRBM(isize, osize, transpose(sigmoidLayer.weights));
+                this.rbm_layers[i] = new cRBM(isize, osize, transpose(sigmoidLayer.weights));
             } else {
                 this.rbm_layers[i] = new RBM(isize, osize, transpose(sigmoidLayer.weights));
             }

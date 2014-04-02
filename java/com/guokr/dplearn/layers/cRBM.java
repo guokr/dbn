@@ -5,9 +5,9 @@ import mikera.vectorz.AVector;
 
 import com.guokr.dplearn.util.MathUtils;
 
-public class CRBM extends RBM {
+public class cRBM extends RBM {
 
-    public CRBM(int vnum, int hnum, AMatrix weights) {
+    public cRBM(int vnum, int hnum, AMatrix weights) {
         super(vnum, hnum, weights);
     }
 

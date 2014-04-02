@@ -10,7 +10,7 @@ import mikera.vectorz.Vectorz;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CDBNTest {
+public class cDBNTest {
 
     public double s(double x) {
         return (7 + x) / 14;
@@ -44,7 +44,7 @@ public class CDBNTest {
     public void test() {
 
         int[] sizes_per_layer = { 6, 12, 24, 12, 6, 2 };
-        CDBN cdbn = new CDBN(sizes_per_layer);
+        cDBN cdbn = new cDBN(sizes_per_layer);
 
         // pretrain
 

@@ -7,7 +7,7 @@ import mikera.vectorz.Vectorz;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class IrisFlowerTest {
+public class IrisTest {
 
     public static double[][] irisdata = { { 4.8, 3.0, 1.4, 0.3, }, { 5.1, 3.8, 1.6, 0.2, }, { 4.6, 3.2, 1.4, 0.2, },
             { 5.3, 3.7, 1.5, 0.2, }, { 5.0, 3.3, 1.4, 0.2, }, { 7.0, 3.2, 4.7, 1.4, }, { 6.4, 3.2, 4.5, 1.5, },
@@ -70,12 +70,12 @@ public class IrisFlowerTest {
     @Test
     public void test() {
         int[] sizes_per_layer = { 4, 8, 8, 3 };
-        CDBN cdbn = new CDBN(sizes_per_layer);
+        cDBN cdbn = new cDBN(sizes_per_layer);
 
         // pretrain
 
-        int k = 1;
-        double pretrain_lr = 0.01;
+        int k = 20;
+        double pretrain_lr = 0.0005;
         int pretraining_epochs = 1000;
 
         for (int i = 0; i < pretraining_epochs; i++) {
@@ -87,7 +87,7 @@ public class IrisFlowerTest {
 
         // finetune
 
-        double finetune_lr = 0.1;
+        double finetune_lr = 0.01;
         int finetune_epochs = 1000;
 
         for (int i = 0; i < finetune_epochs; i++) {
